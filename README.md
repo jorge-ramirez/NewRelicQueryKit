@@ -1,3 +1,3 @@
 # NewRelicQueryKit
 
-A description of this package.
+A package for supporting NewRelic queries.
