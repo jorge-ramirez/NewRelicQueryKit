@@ -63,7 +63,7 @@ SELECT name AS 'Customer Name', age FROM Customers WHERE age < 13 OR age > 19 OR
 
 ## <a name='SELECT'></a>SELECT Clause
 
-<a name='SELECT_ATTR'></a>Select an attribute
+### <a name='SELECT_ATTR'></a>Select an attribute
 
 ```Swift
 QueryBuilder()
@@ -76,7 +76,7 @@ QueryBuilder()
 SELECT name FROM Customers
 ```
 
-<a name='SELECT_ATTR_LABEL'></a>Select an attribute with a label
+### <a name='SELECT_ATTR_LABEL'></a>Select an attribute with a label
 
 ```Swift
 QueryBuilder()
@@ -89,7 +89,7 @@ QueryBuilder()
 SELECT name AS 'Customer Name' FROM Customers
 ```
 
-<a name='SELECT_FUNC'></a>Select a function and attribute
+### <a name='SELECT_FUNC'></a>Select a function and attribute
 
 ```Swift
 QueryBuilder()
@@ -102,7 +102,7 @@ QueryBuilder()
 SELECT AVG(age) FROM Customers
 ```
 
-<a name='SELECT_FUNC_WITH_LABEL'></a>Select a function and attribute with a label
+### <a name='SELECT_FUNC_WITH_LABEL'></a>Select a function and attribute with a label
 
 ```Swift
 QueryBuilder()
@@ -117,7 +117,7 @@ SELECT AVG(age) AS 'Customer Age' FROM Customers
 
 ## <a name='FROM'></a>FROM Clause
 
-<a name='FROM_DATA_TYPE'></a>Specify a data type
+### <a name='FROM_DATA_TYPE'></a>Specify a data type
 
 ```Swift
 QueryBuilder()
@@ -132,7 +132,7 @@ SELECT name FROM Customers
 
 ## <a name='FACET'></a>FACET Clause
 
-<a name='FACET_ATTR'></a>Specify an attribute
+### <a name='FACET_ATTR'></a>Specify an attribute
 
 ```Swift
 QueryBuilder()
@@ -146,7 +146,7 @@ QueryBuilder()
 SELECT COUNT(zipcode) FROM Customers FACET zipcode
 ```
 
-<a name='FACET_ATTR_LABEL'></a>Specify an attribute with a label
+### <a name='FACET_ATTR_LABEL'></a>Specify an attribute with a label
 
 ```Swift
 QueryBuilder()
@@ -162,7 +162,7 @@ SELECT COUNT(zipcode) FROM Customers FACET zipcode AS 'Customer Zipcode'
 
 ## <a name='LIMIT'></a>LIMIT Clause
 
-<a name='LIMIT_COUNT'></a>Specify a count
+### <a name='LIMIT_COUNT'></a>Specify a count
 
 ```Swift
 QueryBuilder()
@@ -176,7 +176,7 @@ QueryBuilder()
 SELECT name FROM Customers LIMIT 25
 ```
 
-<a name='LIMIT_MAX'></a>Specify the max limit
+### <a name='LIMIT_MAX'></a>Specify the max limit
 
 ```Swift
 QueryBuilder()
@@ -192,7 +192,7 @@ SELECT name FROM Customers LIMIT MAX
 
 ## <a name='OFFSET'></a>OFFSET Clause
 
-<a name='OFFSET_COUNT'></a>Specify a count
+### <a name='OFFSET_COUNT'></a>Specify a count
 
 ```Swift
 QueryBuilder()
@@ -209,7 +209,7 @@ SELECT name FROM Customers LIMIT 25 OFFSET 25
 
 ## <a name='ORDER_BY'></a>ORDER BY Clause
 
-<a name='ORDER_BY_ATTR'></a>Specify an attribute (the default sort direction is ascending)
+### <a name='ORDER_BY_ATTR'></a>Specify an attribute (the default sort direction is ascending)
 
 ```Swift
 QueryBuilder()
@@ -223,7 +223,7 @@ QueryBuilder()
 SELECT name FROM Customers ORDER BY age ASC
 ```
 
-<a name='ORDER_BY_ATTR_DIR'></a>Specify an attribute and sort direction
+### <a name='ORDER_BY_ATTR_DIR'></a>Specify an attribute and sort direction
 
 ```Swift
 QueryBuilder()
@@ -239,7 +239,7 @@ SELECT name FROM Customers ORDER BY age DESC
 
 ## <a name='SINCE'></a>SINCE Clause
 
-<a name='SINCE_NOW'></a>Specify the current time
+### <a name='SINCE_NOW'></a>Specify the current time
 
 ```Swift
 QueryBuilder()
@@ -253,7 +253,7 @@ QueryBuilder()
 SELECT name FROM Customers SINCE NOW
 ```
 
-<a name='SINCE_DAY'></a>Specify a relative day
+### <a name='SINCE_DAY'></a>Specify a relative day
 
 * today
 * yesterday
@@ -277,7 +277,7 @@ QueryBuilder()
 SELECT name FROM Customers SINCE THURSDAY
 ```
 
-<a name='SINCE_VALUE'></a>Specify a relative value and unit
+### <a name='SINCE_VALUE'></a>Specify a relative value and unit
 
 * second
 * minute
@@ -300,7 +300,7 @@ QueryBuilder()
 SELECT name FROM Customers SINCE 6 HOUR AGO
 ```
 
-<a name='SINCE_TIMESTAMP'></a>Specify a date
+### <a name='SINCE_TIMESTAMP'></a>Specify a date
 
 ```Swift
 // Sat Mar 26 19:10:37 2022 UTC
@@ -323,7 +323,7 @@ Until accepts the same values as [Since](SINCE).  Simply use `.until(...)` inste
 
 ## <a name='WHERE'></a>WHERE Clause
 
-<a name='WHERE_OPERATOR'></a>Use an operator
+### <a name='WHERE_OPERATOR'></a>Use an operator
 
 * equalTo
 * notEqualTo
@@ -350,7 +350,7 @@ QueryBuilder()
 SELECT name FROM Customers WHERE age >= 18
 ```
 
-<a name='WHERE_COMPOUND'></a>Use a compound operator (AND and OR)
+### <a name='WHERE_COMPOUND'></a>Use a compound operator (AND and OR)
 
 ```Swift
 QueryBuilder()
@@ -371,7 +371,7 @@ SELECT name FROM Customers WHERE age >= 18 AND emailAddress IS NOT NULL
 
 ## <a name='WITH_TIMEZONE'></a>WITH TIMEZONE Clause
 
-<a name='TIMEZONE_SPECIFY'></a>Specify a timezone
+### <a name='TIMEZONE_SPECIFY'></a>Specify a timezone
 
 Currently, only UTC is available.
 
