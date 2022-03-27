@@ -2,7 +2,20 @@
 
 A package for supporting NewRelic queries.
 
-## Creating Queries
+## Table of Contents
+* [Overview](#Overview)
+* [SELECT](#SELECT)
+* [FROM](#FROM)
+* [FACET](#FACET)
+* [LIMIT](#LIMIT)
+* [OFFSET](#OFFSET)
+* [WHERE](#WHERE)
+* [ORDER BY](#ORDER_BY)
+* [SINCE](#SINCE)
+* [UNTIL](#UNTIL)
+* [WITH TIMEZONE](#WITH_TIMEZONE)
+
+## <a name='Overview'></a>Overview
 
 To create a query, use a `QueryBuilder`.  Here's an Example:
 
@@ -30,7 +43,7 @@ Which generates the following query:
 SELECT name AS 'Customer Name', age FROM Customers WHERE age < 13 OR age > 19 ORDER BY age DESC SINCE 5 DAY AGO UNTIL NOW WITH TIMEZONE 'UTC'
 ```
 
-## SELECT
+## <a name='SELECT'></a>SELECT
 
 Select an attribute
 
@@ -84,7 +97,7 @@ QueryBuilder()
 SELECT AVG(age) AS 'Customer Age' FROM Customers
 ```
 
-## FROM
+## <a name='FROM'></a>FROM
 
 Select a data type
 
@@ -99,4 +112,11 @@ QueryBuilder()
 SELECT name FROM Customers
 ```
 
-## FACET
+## <a name='FACET'></a>FACET
+## <a name='LIMIT'></a>LIMIT
+## <a name='OFFSET'></a>OFFSET
+## <a name='WHERE'></a>WHERE
+## <a name='ORDER_BY'></a>ORDER BY
+## <a name='SINCE'></a>SINCE
+## <a name='UNTIL'></a>UNTIL
+## <a name='WITH_TIMEZONE'></a>WITH TIMEZONE
