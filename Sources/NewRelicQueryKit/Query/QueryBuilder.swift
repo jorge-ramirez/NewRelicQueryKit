@@ -142,11 +142,3 @@ public class QueryBuilder {
     }
 
 }
-
-extension QueryBuilder: QueryRepresentable {
-
-    public func stringRepresentation() -> String {
-        build()
-    }
-
-}

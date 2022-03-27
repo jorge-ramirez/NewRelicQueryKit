@@ -3,14 +3,6 @@ import XCTest
 
 class QueryBuilderTests: XCTestCase {
 
-    override func setUp() {
-        super.setUp()
-
-        let query = QueryBuilder()
-            .select("name")
-            .from("MobileBreadcrumb")
-    }
-
     // MARK: SELECT
 
     func testSelectWildcard() {
@@ -131,7 +123,7 @@ class QueryBuilderTests: XCTestCase {
         let query = QueryBuilder()
             .select("name")
             .from("MobileBreadcrumb")
-            .since(.now)
+            .since(Time.now)
             .build()
         XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb SINCE NOW")
     }
@@ -169,7 +161,7 @@ class QueryBuilderTests: XCTestCase {
         let query = QueryBuilder()
             .select("name")
             .from("MobileBreadcrumb")
-            .until(.now)
+            .until(Time.now)
             .build()
         XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb UNTIL NOW")
     }
