@@ -3,11 +3,6 @@ import XCTest
 
 class SelectTests: XCTestCase {
 
-    func testWildcard() {
-        let sut: Select = .wildcard
-        XCTAssertEqual(sut.stringRepresentation(), "*")
-    }
-
     func testAttributeWithNoLabel() {
         let sut: Select = .attribute("name")
         XCTAssertEqual(sut.stringRepresentation(), "name")

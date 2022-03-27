@@ -3,136 +3,252 @@ import XCTest
 
 class QueryBuilderTests: XCTestCase {
 
-    private var sut: QueryBuilder!
-
     override func setUp() {
         super.setUp()
 
-        sut = QueryBuilder()
-            .selectAttribute("name")
-            .fromDataType("MobileBreadcrumb")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
     }
 
     // MARK: SELECT
 
     func testSelectWildcard() {
-        sut = QueryBuilder()
-            .selectWildCard()
-            .fromDataType("MobileBreadcrumb")
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT * FROM MobileBreadcrumb")
+        let query = QueryBuilder()
+            .select("*")
+            .from("MobileBreadcrumb")
+            .build()
+        XCTAssertEqual(query, "SELECT * FROM MobileBreadcrumb")
     }
 
     func testSelectAttribute() {
-        sut = QueryBuilder()
-            .selectAttribute("name")
-            .fromDataType("MobileBreadcrumb")
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb")
     }
 
     func testSelectAttributeWithLabel() {
-        sut = QueryBuilder()
-            .selectAttribute("name", label: "MyName")
-            .fromDataType("MobileBreadcrumb")
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name AS 'MyName' FROM MobileBreadcrumb")
+        let query = QueryBuilder()
+            .select("name", label: "MyName")
+            .from("MobileBreadcrumb")
+            .build()
+        XCTAssertEqual(query, "SELECT name AS 'MyName' FROM MobileBreadcrumb")
     }
 
     func testSelectFunction() {
-        sut = QueryBuilder()
+        let query = QueryBuilder()
             .selectFunction("COUNT", attribute: "name")
-            .fromDataType("MobileBreadcrumb")
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT COUNT(name) FROM MobileBreadcrumb")
+            .from("MobileBreadcrumb")
+            .build()
+        XCTAssertEqual(query, "SELECT COUNT(name) FROM MobileBreadcrumb")
     }
 
     func testSelectFunctionWithLabel() {
-        sut = QueryBuilder()
+        let query = QueryBuilder()
             .selectFunction("COUNT", attribute: "name", label: "MyName")
-            .fromDataType("MobileBreadcrumb")
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT COUNT(name) AS 'MyName' FROM MobileBreadcrumb")
+            .from("MobileBreadcrumb")
+            .build()
+        XCTAssertEqual(query, "SELECT COUNT(name) AS 'MyName' FROM MobileBreadcrumb")
     }
 
     // MARK: FROM
 
     func testFromDataType() {
-        sut = QueryBuilder()
-            .selectAttribute("name")
-            .fromDataType("MobileBreadcrumb")
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb")
     }
 
     // MARK: FACET
 
     func testFacetAttribute() {
-        sut = sut.facetAttribute("name")
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb FACET name")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .facet("name")
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb FACET name")
     }
 
     func testFacetAttributeWithLabel() {
-        sut = sut.facetAttribute("name", label: "MyName")
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb FACET name AS 'MyName'")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .facet("name", label: "MyName")
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb FACET name AS 'MyName'")
     }
 
     // MARK: LIMIT
 
     func testLimitCount() {
-        sut = sut.limitCount(5)
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb LIMIT 5")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .limit(5)
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb LIMIT 5")
     }
 
     func testLimitMax() {
-        sut = sut.limitMax()
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb LIMIT MAX")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .limit(Limit.max)
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb LIMIT MAX")
     }
 
     // MARK: OFFSET
 
     func testOffsetCount() {
-        sut = sut.offsetCount(5)
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb OFFSET 5")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .offset(5)
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb OFFSET 5")
     }
 
     // MARK: ORDER BY
 
     func testOrderByAttribute() {
-        sut = sut.orderByAttribute("name", direction: .ascending)
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb ORDER BY name ASC")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .orderBy("name", .ascending)
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb ORDER BY name ASC")
     }
 
     // MARK: SINCE
 
     func testSince() {
-        sut = sut.since(.now)
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb SINCE NOW")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .since(.now)
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb SINCE NOW")
+    }
+
+    func testSinceRelativeDay() {
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .since(.saturday)
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb SINCE SATURDAY")
+    }
+
+    func testSinceRelativeValue() {
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .since(5, .day)
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb SINCE 5 DAY AGO")
+    }
+
+    func testSinceTimestamp() {
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .since(Date(timeIntervalSince1970: 1648321837)) // Sat Mar 26 19:10:37 2022 UTC
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb SINCE '2022-03-26 19:10:37 +0000'")
     }
 
     // MARK: UNTIL
 
     func testUntilNow() {
-        sut = sut.until(.now)
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb UNTIL NOW")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .until(.now)
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb UNTIL NOW")
+    }
+
+    func testUntilRelativeDay() {
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .until(.saturday)
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb UNTIL SATURDAY")
+    }
+
+    func testUntilRelativeValue() {
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .until(5, .day)
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb UNTIL 5 DAY AGO")
+    }
+
+    func testUntilTimestamp() {
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .until(Date(timeIntervalSince1970: 1648321837)) // Sat Mar 26 19:10:37 2022 UTC
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb UNTIL '2022-03-26 19:10:37 +0000'")
     }
 
     // MARK: WHERE
 
-    func testWhereClause() {
-        sut = sut.whereClause(.isNull("name"))
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb WHERE name IS NULL")
+    func testWhere() {
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .where(.attributeIsNull("name"))
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb WHERE name IS NULL")
     }
 
     func testAnd() {
-        sut = sut.and(.greaterThan("age", 5), .lessThanOrEqual("age", 15))
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb WHERE age > 5 AND age <= 15")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .where(
+                .and(
+                    .attribute("age", greaterThan: 5),
+                    .attribute("age", lessThanOrEqualTo: 15)
+                )
+            )
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb WHERE age > 5 AND age <= 15")
     }
 
     func testOr() {
-        sut = sut.or(.greaterThan("age", 5), .lessThanOrEqual("age", 15))
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb WHERE age > 5 OR age <= 15")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .where(
+                .or(
+                    .attribute("age", greaterThan: 5),
+                    .attribute("age", lessThanOrEqualTo: 15)
+                )
+            )
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb WHERE age > 5 OR age <= 15")
     }
 
     // MARK: WITH TIMEZONE
 
     func testTimezone() {
-        sut = sut.timezone(.utc)
-        XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb WITH TIMEZONE 'UTC'")
+        let query = QueryBuilder()
+            .select("name")
+            .from("MobileBreadcrumb")
+            .timezone(.utc)
+            .build()
+        XCTAssertEqual(query, "SELECT name FROM MobileBreadcrumb WITH TIMEZONE 'UTC'")
     }
 
 }

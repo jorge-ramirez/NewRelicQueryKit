@@ -20,11 +20,7 @@ public class QueryBuilder {
         return self
     }
 
-    public func selectWildCard() -> QueryBuilder {
-        select(.wildcard)
-    }
-
-    public func selectAttribute(_ attribute: String, label: String? = nil) -> QueryBuilder {
+    public func select(_ attribute: String, label: String? = nil) -> QueryBuilder {
         select(.attribute(attribute, label: label))
     }
 
@@ -39,7 +35,7 @@ public class QueryBuilder {
         return self
     }
 
-    public func fromDataType(_ dataType: String) -> QueryBuilder {
+    public func from(_ dataType: String) -> QueryBuilder {
         from(.dataType(dataType))
     }
 
@@ -50,7 +46,7 @@ public class QueryBuilder {
         return self
     }
 
-    public func facetAttribute(_ attribute: String, label: String? = nil) -> QueryBuilder {
+    public func facet(_ attribute: String, label: String? = nil) -> QueryBuilder {
         facet(.attribute(attribute, label: label))
     }
 
@@ -61,12 +57,8 @@ public class QueryBuilder {
         return self
     }
 
-    public func limitCount(_ count: Int) -> QueryBuilder {
+    public func limit(_ count: Int) -> QueryBuilder {
         limit(.count(count))
-    }
-
-    public func limitMax() -> QueryBuilder {
-        limit(.max)
     }
 
     // MARK: OFFSET
@@ -76,19 +68,19 @@ public class QueryBuilder {
         return self
     }
 
-    public func offsetCount(_ count: Int) -> QueryBuilder {
+    public func offset(_ count: Int) -> QueryBuilder {
         offset(.count(count))
     }
 
     // MARK: ORDER BY
 
     public func orderBy(_ orderBy: OrderBy) -> QueryBuilder {
-        query.orderBys.append(orderBy)
+        query.orderBy = orderBy
         return self
     }
 
-    public func orderByAttribute(_ attribute: String, direction: OrderBy.Direction = .ascending) -> QueryBuilder {
-        return orderBy(.attribute(attribute, direction: direction))
+    public func orderBy(_ attribute: String, _ direction: OrderBy.Direction = .ascending) -> QueryBuilder {
+        orderBy(.attribute(attribute, direction: direction))
     }
 
     // MARK: SINCE
@@ -98,6 +90,18 @@ public class QueryBuilder {
         return self
     }
 
+    public func since(_ day: Time.Day) -> QueryBuilder {
+        since(.relativeDay(day))
+    }
+
+    public func since(_ value: Int, _ unit: Time.Unit) -> QueryBuilder {
+        since(.relativeValue(value, unit))
+    }
+
+    public func since(_ timestamp: Date) -> QueryBuilder {
+        since(.timestamp(timestamp))
+    }
+
     // MARK: UNTIL
 
     public func until(_ until: Time) -> QueryBuilder {
@@ -105,19 +109,23 @@ public class QueryBuilder {
         return self
     }
 
+    public func until(_ day: Time.Day) -> QueryBuilder {
+        until(.relativeDay(day))
+    }
+
+    public func until(_ value: Int, _ unit: Time.Unit) -> QueryBuilder {
+        until(.relativeValue(value, unit))
+    }
+
+    public func until(_ timestamp: Date) -> QueryBuilder {
+        until(.timestamp(timestamp))
+    }
+
     // MARK: WHERE
 
-    public func whereClause(_ whereClause: Where) -> QueryBuilder {
+    public func `where`(_ whereClause: Where) -> QueryBuilder {
         query.wheres.append(whereClause)
         return self
-    }
-
-    public func and(_ where1: Where, _ where2: Where) -> QueryBuilder {
-        whereClause(.and(where1, where2))
-    }
-
-    public func or(_ where1: Where, _ where2: Where) -> QueryBuilder {
-        whereClause(.or(where1, where2))
     }
 
     // MARK: WITH TIMEZONE
@@ -127,12 +135,18 @@ public class QueryBuilder {
         return self
     }
 
+    // MARK: Query Generation
+
+    public func build() -> String {
+        query.stringRepresentation()
+    }
+
 }
 
 extension QueryBuilder: QueryRepresentable {
 
     public func stringRepresentation() -> String {
-        query.stringRepresentation()
+        build()
     }
 
 }

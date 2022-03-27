@@ -4,24 +4,75 @@ import Foundation
 /// [New Relic Documentation](https://docs.newrelic.com/docs/query-your-data/nrql-new-relic-query-language/get-started/nrql-syntax-clauses-functions/#sel-where)
 public enum Where {
 
-    case equal(String, WhereValueRepresentable)
-    case notEqual(String, WhereValueRepresentable)
-    case lessThan(String, WhereValueRepresentable)
-    case lessThanOrEqual(String, WhereValueRepresentable)
-    case greaterThan(String, WhereValueRepresentable)
-    case greaterThanOrEqual(String, WhereValueRepresentable)
+    public enum Operator: String {
+        case equals = "="
+        case notEquals = "!="
+        case lessThan = "<"
+        case lessThanOrEqualTo = "<="
+        case greaterThan = ">"
+        case greaterThanOrEqualTo = ">="
 
-    case inSet(String, [WhereValueRepresentable])
-    case notInSet(String, [WhereValueRepresentable])
+        case inSet = "IN"
+        case notInSet = "NOT IN"
 
-    case isNull(String)
-    case isNotNull(String)
+        case isNull = "IS NULL"
+        case isNotNull = "IS NOT NULL"
 
-    case like(String, String)
-    case notLike(String, String)
+        case like = "LIKE"
+        case notLike = "NOT LIKE"
+    }
 
+    case clause(_ attribute: String, `operator`: Operator, value: WhereValueRepresentable)
     indirect case and(Where, Where)
     indirect case or(Where, Where)
+
+    static func attribute(_ attribute: String, equalTo value: WhereValueRepresentable) -> Where {
+        .clause(attribute, operator: .equals, value: value)
+    }
+
+    static func attribute(_ attribute: String, notEqualTo value: WhereValueRepresentable) -> Where {
+        .clause(attribute, operator: .notEquals, value: value)
+    }
+
+    static func attribute(_ attribute: String, lessThan value: WhereValueRepresentable) -> Where {
+        .clause(attribute, operator: .lessThan, value: value)
+    }
+
+    static func attribute(_ attribute: String, lessThanOrEqualTo value: WhereValueRepresentable) -> Where {
+        .clause(attribute, operator: .lessThanOrEqualTo, value: value)
+    }
+
+    static func attribute(_ attribute: String, greaterThan value: WhereValueRepresentable) -> Where {
+        .clause(attribute, operator: .greaterThan, value: value)
+    }
+
+    static func attribute(_ attribute: String, greaterThanOrEqualTo value: WhereValueRepresentable) -> Where {
+        .clause(attribute, operator: .greaterThanOrEqualTo, value: value)
+    }
+
+    static func attribute(_ attribute: String, in value: WhereValueRepresentable) -> Where {
+        .clause(attribute, operator: .inSet, value: value)
+    }
+
+    static func attribute(_ attribute: String, notIn value: WhereValueRepresentable) -> Where {
+        .clause(attribute, operator: .notInSet, value: value)
+    }
+
+    static func attributeIsNull(_ attribute: String) -> Where {
+        .clause(attribute, operator: .isNull, value: "")
+    }
+
+    static func attributeIsNotNull(_ attribute: String) -> Where {
+        .clause(attribute, operator: .isNotNull, value: "")
+    }
+
+    static func attribute(_ attribute: String, like value: WhereValueRepresentable) -> Where {
+        .clause(attribute, operator: .like, value: value)
+    }
+
+    static func attribute(_ attribute: String, notLike value: WhereValueRepresentable) -> Where {
+        .clause(attribute, operator: .notLike, value: value)
+    }
 
 }
 
@@ -29,34 +80,15 @@ extension Where: QueryRepresentable {
 
     internal func stringRepresentation() -> String {
         switch self {
-        case let .equal(name, value):
-            return String(format: "%@ = %@", name, value.escapedQueryValue())
-        case let .notEqual(name, value):
-            return String(format: "%@ != %@", name, value.escapedQueryValue())
-        case let .lessThan(name, value):
-            return String(format: "%@ < %@", name, value.escapedQueryValue())
-        case let .lessThanOrEqual(name, value):
-            return String(format: "%@ <= %@", name, value.escapedQueryValue())
-        case let .greaterThan(name, value):
-            return String(format: "%@ > %@", name, value.escapedQueryValue())
-        case let .greaterThanOrEqual(name, value):
-            return String(format: "%@ >= %@", name, value.escapedQueryValue())
-
-        case let .inSet(name, value):
-            return String(format: "%@ IN (%@)", name, value.escapedQueryValue())
-        case let .notInSet(name, value):
-            return String(format: "%@ NOT IN (%@)", name, value.escapedQueryValue())
-
-        case let .isNull(name):
-            return String(format: "%@ IS NULL", name)
-        case let .isNotNull(name):
-            return String(format: "%@ IS NOT NULL", name)
-
-        case let .like(name, format):
-            return String(format: "%@ LIKE '%@'", name, format)
-        case let .notLike(name, format):
-            return String(format: "%@ NOT LIKE '%@'", name, format)
-
+        case let .clause(attribute, `operator`, value):
+            switch `operator` {
+            case .isNull, .isNotNull:
+                return String(format: "%@ %@", attribute, `operator`.rawValue)
+            case .inSet, .notInSet:
+                return String(format: "%@ %@ (%@)", attribute, `operator`.rawValue, value.escapedQueryValue())
+            default:
+                return String(format: "%@ %@ %@", attribute, `operator`.rawValue, value.escapedQueryValue())
+            }
         case let .and(where1, where2):
             return String(format: "%@ AND %@", where1.stringRepresentation(), where2.stringRepresentation())
         case let .or(where1, where2):

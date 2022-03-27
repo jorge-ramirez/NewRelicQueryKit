@@ -45,7 +45,7 @@ class QueryTests: XCTestCase {
     }
 
     func testOrderBy() {
-        sut.orderBys.append(.attribute("name", direction: .ascending))
+        sut.orderBy = .attribute("name", direction: .ascending)
         XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb ORDER BY name ASC")
     }
 
@@ -60,13 +60,22 @@ class QueryTests: XCTestCase {
     }
 
     func testWhere() {
-        sut.wheres.append(.isNull("name"))
+        sut.wheres.append(.attributeIsNull("name"))
         XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb WHERE name IS NULL")
     }
 
     func testTimezone() {
         sut.timezone = .utc
         XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb WITH TIMEZONE 'UTC'")
+    }
+
+    func testFoo() {
+        let query = QueryBuilder()
+            .select("name")
+            .from("Customers")
+            .build()
+
+        print(query)
     }
 
 }

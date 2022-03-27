@@ -9,7 +9,7 @@ public class Query {
     internal var facets: [Facet]
     internal var limit: Limit?
     internal var offset: Offset?
-    internal var orderBys: [OrderBy]
+    internal var orderBy: OrderBy?
     internal var since: Time?
     internal var until: Time?
     internal var wheres: [Where]
@@ -21,7 +21,7 @@ public class Query {
         self.facets = []
         self.limit = nil
         self.offset = nil
-        self.orderBys = []
+        self.orderBy = nil
         self.since = nil
         self.until = nil
         self.wheres = []
@@ -37,10 +37,10 @@ public class Query {
             buildFacetClause(),
             buildLimitClause(),
             buildOffsetClause(),
+            buildWhereClause(),
             buildOrderByClause(),
             buildSinceClause(),
             buildUntilClause(),
-            buildWhereClause(),
             buildTimezoneClause()
         ]
 
@@ -84,13 +84,21 @@ public class Query {
         return String(format: "OFFSET %@", offset.stringRepresentation())
     }
 
-    private func buildOrderByClause() -> String? {
-        guard !orderBys.isEmpty else {
+    private func buildWhereClause() -> String? {
+        guard !wheres.isEmpty else {
             return nil
         }
 
-        let values = orderBys.map { $0.stringRepresentation() }.joined(separator: ", ")
-        return String(format: "ORDER BY %@", values)
+        let values = wheres.map { $0.stringRepresentation() }.joined(separator: ", ")
+        return String(format: "WHERE %@", values)
+    }
+
+    private func buildOrderByClause() -> String? {
+        guard let orderBy = orderBy else {
+            return nil
+        }
+
+        return String(format: "ORDER BY %@", orderBy.stringRepresentation())
     }
 
     private func buildSinceClause() -> String? {
@@ -107,15 +115,6 @@ public class Query {
         }
 
         return String(format: "UNTIL %@", until.stringRepresentation())
-    }
-
-    private func buildWhereClause() -> String? {
-        guard !wheres.isEmpty else {
-            return nil
-        }
-
-        let values = wheres.map { $0.stringRepresentation() }.joined(separator: ", ")
-        return String(format: "WHERE %@", values)
     }
 
     private func buildTimezoneClause() -> String? {
