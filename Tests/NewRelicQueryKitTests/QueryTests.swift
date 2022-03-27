@@ -69,13 +69,4 @@ class QueryTests: XCTestCase {
         XCTAssertEqual(sut.stringRepresentation(), "SELECT name FROM MobileBreadcrumb WITH TIMEZONE 'UTC'")
     }
 
-    func testFoo() {
-        let query = QueryBuilder()
-            .select("name")
-            .from("Customers")
-            .build()
-
-        print(query)
-    }
-
 }
