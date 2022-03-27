@@ -4,6 +4,10 @@ import PackageDescription
 
 let package = Package(
     name: "NewRelicQueryKit",
+    platforms: [
+        .macOS(.v12),
+        .iOS(.v15)
+    ],
     products: [
         .library(name: "NewRelicQueryKit", targets: ["NewRelicQueryKit"]),
     ],
