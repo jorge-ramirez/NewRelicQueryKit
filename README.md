@@ -36,7 +36,7 @@ A package for supporting NewRelic queries.
 
 ## <a name='Overview'></a>Overview
 
-To create a query, use a `QueryBuilder`.  Here's an Example:
+To create a query, use a `QueryBuilder` object.  Here's an Example:
 
 ```Swift
 let query = QueryBuilder()
@@ -60,6 +60,19 @@ Which generates the following query:
 
 ```SQL
 SELECT name AS 'Customer Name', age FROM Customers WHERE age < 13 OR age > 19 ORDER BY age DESC SINCE 5 DAY AGO UNTIL NOW WITH TIMEZONE 'UTC'
+```
+
+To execute the query, use a `NewReliceService` object.  Here's an Example using the query from above:
+
+```Swift
+let service = NewRelicService(accountId: "XXX", queryKey: "XXX")
+let results = try await service.eventsForQuery(query)
+```
+
+If you have a Decodable type for your events, you can use the `decodedEventsForQuery` method instead:
+
+```Swift
+let results: [MyEventType] = try await service.decodedEventsForQuery(query)
 ```
 
 ## <a name='SELECT'></a>SELECT Clause
