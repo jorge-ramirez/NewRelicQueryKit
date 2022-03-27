@@ -1,12 +1,29 @@
 import Foundation
 
-public enum NewRelicServiceError: Error {
+public enum NewRelicServiceError: Error, LocalizedError {
     case couldNotCreateBaseURL
     case couldNotCreateQueryURL
     case couldNotFindResultsInResponse
     case couldNotParseJSONResponse
     case invalidResponseType
     case invalidStatusCode(Int)
+
+    public var errorDescription: String? {
+        switch self {
+        case .couldNotCreateBaseURL:
+            return "Could not create the base query URL."
+        case .couldNotCreateQueryURL:
+            return "Could not create the query URL."
+        case .couldNotFindResultsInResponse:
+            return "Could not find the results element in the response."
+        case .couldNotParseJSONResponse:
+            return "Could not parse the JSON response."
+        case .invalidResponseType:
+            return "Invalid response type."
+        case let .invalidStatusCode(statusCode):
+            return "Invalid status code: \(statusCode)."
+        }
+    }
 }
 
 public class NewRelicService {
@@ -22,6 +39,14 @@ public class NewRelicService {
     }
 
     // MARK: Public Methods
+
+    public func objectsForQuery<T: Decodable>(_ query: String) async throws -> [T] {
+        let json = try await resultsForQuery(query)
+        let jsonData = try JSONSerialization.data(withJSONObject: json)
+        let objects = try JSONDecoder().decode([T].self, from: jsonData)
+
+        return objects
+    }
 
     public func resultsForQuery(_ query: String) async throws -> [[String: Any]] {
         let json = try await jsonForQuery(query)
