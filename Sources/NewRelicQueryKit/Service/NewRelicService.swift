@@ -3,7 +3,7 @@ import Foundation
 public enum NewRelicServiceError: Error, LocalizedError {
     case couldNotCreateBaseURL
     case couldNotCreateQueryURL
-    case couldNotFindResultsInResponse
+    case couldNotFindEventsInResponse
     case couldNotParseJSONResponse
     case invalidResponseType
     case invalidStatusCode(Int)
@@ -14,8 +14,8 @@ public enum NewRelicServiceError: Error, LocalizedError {
             return "Could not create the base query URL."
         case .couldNotCreateQueryURL:
             return "Could not create the query URL."
-        case .couldNotFindResultsInResponse:
-            return "Could not find the results element in the response."
+        case .couldNotFindEventsInResponse:
+            return "Could not find the events element in the response."
         case .couldNotParseJSONResponse:
             return "Could not parse the JSON response."
         case .invalidResponseType:
@@ -40,22 +40,23 @@ public class NewRelicService {
 
     // MARK: Public Methods
 
-    public func objectsForQuery<T: Decodable>(_ query: String) async throws -> [T] {
-        let json = try await resultsForQuery(query)
+    public func decodedEventsForQuery<T: Decodable>(_ query: String) async throws -> [T] {
+        let json = try await eventsForQuery(query)
         let jsonData = try JSONSerialization.data(withJSONObject: json)
         let objects = try JSONDecoder().decode([T].self, from: jsonData)
 
         return objects
     }
 
-    public func resultsForQuery(_ query: String) async throws -> [[String: Any]] {
+    public func eventsForQuery(_ query: String) async throws -> [[String: Any]] {
         let json = try await jsonForQuery(query)
 
-        guard let results = json["results"] as? [[String: Any]] else {
-            throw NewRelicServiceError.couldNotFindResultsInResponse
+        guard let results = json["results"] as? [[String: Any]],
+              let events = results.first?["events"] as? [[String: Any]] else {
+            throw NewRelicServiceError.couldNotFindEventsInResponse
         }
 
-        return results
+        return events
     }
 
     // MARK: Private Methods
