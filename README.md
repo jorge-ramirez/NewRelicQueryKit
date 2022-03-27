@@ -13,7 +13,7 @@ A package for supporting NewRelic queries.
   * [Specify a data type](#FROM_DATA_TYPE)
 * [FACET Clause](#FACET)
   * [Specify an attribute](#FACET_ATTR)
-  * [Specify an attribute with a label](F#ACET_ATTR_LABEL)
+  * [Specify an attribute with a label](#FACET_ATTR_LABEL)
 * [LIMIT Clause](#LIMIT)
   * [Specify a count](#LIMIT_COUNT)
   * [Specify the max limit](#LIMIT_MAX)
@@ -32,6 +32,7 @@ A package for supporting NewRelic queries.
   * [Use an operator](#WHERE_OPERATOR)
   * [Use a compound operator (AND and OR)](#WHERE_COMPOUND)
 * [WITH TIMEZONE Clause](#WITH_TIMEZONE)
+  * [Specify a timezone](#TIMEZONE_SPECIFY)
 
 ## <a name='Overview'></a>Overview
 
@@ -319,7 +320,7 @@ SELECT name FROM Customers SINCE '2022-03-26 19:10:37 +0000'
 
 ## <a name='UNTIL'></a>UNTIL Clause
 
-Until accepts the same values as [Since](SINCE).  Simply use `.until(...)` instead of `.since(...)`.
+Until accepts the same values as [Since](#SINCE).  Simply use `.until(...)` instead of `.since(...)`.
 
 ## <a name='WHERE'></a>WHERE Clause
 
