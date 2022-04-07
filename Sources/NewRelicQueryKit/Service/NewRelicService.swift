@@ -59,9 +59,7 @@ public class NewRelicService {
         return events
     }
 
-    // MARK: Private Methods
-
-    private func jsonForQuery(_ query: String) async throws -> [String: Any] {
+    public func jsonForQuery(_ query: String) async throws -> [String: Any] {
         let request = try urlRequest(for: query)
         let (data, response) = try await urlSession.data(for: request)
 
@@ -77,6 +75,19 @@ public class NewRelicService {
 
         return json
     }
+
+    public func jsonForQuery(_ query: String, completion: @escaping ((Result<[String: Any], Error>) -> Void)) {
+        Task {
+            do {
+                let results = try await jsonForQuery(query)
+                completion(.success(results))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    }
+
+    // MARK: Private Methods
 
     private func url(for query: String) throws -> URL {
         let urlString = String(format: "https://insights-api.newrelic.com/v1/accounts/%@/query", accountId)
